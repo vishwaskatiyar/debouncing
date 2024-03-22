@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Event Counts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: blanchedalmond;
+            height: 200vh;
+            margin: 0;
+            padding: 0;
+            /* position: fixed; */
+        }
+
+        .count-section {
+            position: sticky;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .count-section {
+            position: fixed;
+            top: 50px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .count-section p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Scroll Event Counts</h1>
+    </header>
+
+    <div class="count-section">
+        <p class="n_count">Normal Count: 0</p>
+        <p class="t_count">Throttle Count: 0</p>
+        <p class="d_count">Debounce Count: 0</p>
+    </div>
+
+    <script>
+        const normal_div = document.querySelector(".n_count");
+        const throttle_div = document.querySelector(".t_count");
+        const debounce_div = document.querySelector(".d_count");
+
+        let ncount = 0;
+        let tcount = 0;
+        let dcount = 0;
+        let isScrolling = true;
+
+        const normalCount = () => {
+            ncount++;
+            normal_div.textContent = `Normal Count: ${ncount}`;
+        }
+
+        const throttleCount = () => {
+            if (isScrolling === true) {
+                tcount++;
+                isScrolling = false;
+                throttle_div.textContent = `Throttle Count: ${tcount}`;
+                setTimeout(() => {
+                    isScrolling = true;
+                }, 1000)
+            }
+        }
+
+        let interval;
+        const debounceCount = () => {
+            clearTimeout(interval);
+            interval = setTimeout(() => {
+                dcount++;
+                debounce_div.textContent = `Debounce Count: ${dcount}`;
+            }, 1000)
+        }
+
+        function showCount() {
+            normalCount();
+            throttleCount();
+            debounceCount();
+        }
+
+        window.addEventListener("scroll", showCount);
+    </script>
+</body>
+
+</html>
